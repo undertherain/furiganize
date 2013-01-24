@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 # License: GNU GPL, version 3 or later; http://www.gnu.org/copyleft/gpl.html
 ## Automatic reading generation with kakasi and mecab.
+## Written by Aleksandr Drozd, used some code from Anki Japanese support addon
 
 import sys, os, platform, re, subprocess
 import codecs
@@ -14,9 +15,9 @@ srcFields = ['Expression']
 dstFields = ['Reading']
 
 kakasiArgsMultiple = ["-isjis", "-osjis", "-u", "-JH", "-KH", "-p"]
+#kakasiArgs = ["-isjis", "-osjis", "-u", "-JH", "-KH","-s","-f"]
 kakasiArgs = ["-isjis", "-osjis", "-u", "-JH", "-KH"]
 mecabArgs = ['--node-format=%m[%f[7]] ', '--eos-format=\n', '--unk-format=%m[] ']
-#mecabArgs = ['--node-format=%pS%f[7]', '--eos-format=\n', '--unk-format=%m[] ']
 
 class Token:
     def __init__(self,_kanji,_reading):
@@ -66,13 +67,7 @@ def Furiganize(dummy = ''):
                 if token.reading is not None: 
                     xWordCursor.setPropertyValue("RubyText", token.reading)
                 xWordCursor.goRight(len(token.kanji),False)
-      
-            #ProcessText(theText)
-           # if len(theString) > 0:
-           #     newString = CapitalizeString(theString)
-           #     xTextRange.setString(newString)
-             #   xController.select(xTextRange)
-            i += 1
+
     return None
 
 def escapeText(text):
@@ -273,20 +268,10 @@ def ProcessPhrase(expr):
             post=pref+kanji[-1]
             kanji=kanji[:-1]
             reading=reading[:-1]
-#            print kanji
- #       print "#",pref,post
         out.append(Token(pref,None))
         out=out+SplitKanji(Token(kanji,reading))
         out.append(Token(post,None))
-        #out.append("%s%s[%s]%s" % (pref,kanji, reading,post))
         continue
-    #fin = u""
-    #for o in out: print o
-    #for token in (out):
-    #    print(unicode(s))
-        #if c < len(out) - 1 and re.match("^[A-Za-z0-9]+$", out[c+1]):
-            #s += " "
-    #    fin += token[0]
     return out
 
  
@@ -295,17 +280,14 @@ def ProcessPhrase(expr):
 
 if __name__ == "__main__":
     expr = u"カリン、 千葉 千葉 千 彼二千三百六十円も使った。回転寿司."
+    expr = u"私は日本人です"
     print expr
-#    print mecab.GetReadingRaw(expr)
+    print kakasi.reading(expr)
+
     print "-------------------" 
-    #print kakasi.reading(expr)
-    #print mecab.GetReadingRaw(expr)
-    #print "-------------------" 
     fin=u""
     tokens=processSentence(expr)
-    #print tokens
     for token in tokens:
-#        print token
         fin=fin+token.kanji
         if token.reading is not None: fin=fin+"["+token.reading+"]"
     print fin
