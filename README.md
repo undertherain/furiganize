@@ -6,7 +6,7 @@ Furiganize is furigana (Japanese phonetic symbols) insertion macro for LibreOffi
 It is written in Python and uses mecab and kakasi installed system-wide<br/>
 It makes things easier for Linux users, you just need to install kakasi, mecab and mecab-naist-jdic-eucjp packages,<br/>
 they are usually available form standard repositories.<br/>
-hen copy macro to your LibreOffice script path,<br/>
+Then copy macro to your LibreOffice script path,<br/>
 something like ~/.config/libreoffice/3/user/Scripts/python<br/>
 (libreoffice-script-provider-python package should be installed to enable Python macros in LibreOffice)
 select you Japanese text and run macro.<br/>
@@ -20,3 +20,4 @@ Enjoy :)<br/>
 
 p.s.<br/>
 Suggested reading might not always be 100% correct, but it's more due to the limitations of mecab, rather than the macro. <br/>
+Furigana is inserted as "ruby text", to edit it go to main menu -> Format -> Asian phonetic guide
