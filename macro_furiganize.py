@@ -40,34 +40,33 @@ def Furiganize(dummy = ''):
     if count == 1 and len(xIndexAccess.getByIndex(0).getString()) == 0:
         return None
         # No selection. Process the word with the caret within it.
-        xTextRange = xIndexAccess.getByIndex(0)
-        xWordCursor = xTextRange.getText().createTextCursorByRange(xTextRange)
-        if not xWordCursor.isStartOfWord(): xWordCursor.gotoStartOfWord(False)
-        xWordCursor.gotoEndOfWord(True)
-        original=xWordCursor.getString()
-        xWordCursor.setString("aaa"+original+"bbbwr")
+        #xTextRange = xIndexAccess.getByIndex(0)
+        #xWordCursor = xTextRange.getText().createTextCursorByRange(xTextRange)
+        #if not xWordCursor.isStartOfWord(): xWordCursor.gotoStartOfWord(False)
+        #xWordCursor.gotoEndOfWord(True)
+        #original=xWordCursor.getString()
+        #xWordCursor.setString("aaa"+original+"bbbwr")
+        #for token in processSentence(original):
+        #    xWordCursor.setString(token.kanji)
+        #    if token.reading is not None: 
+        #        xWordCursor.setPropertyValue("RubyText", token.reading)
+        #    xWordCursor.goRight(len(token.kanji),False)
+
+    else:
+        # Selection occurred. Now process all the selected pieces of text.
+        i = 0
+#        while i < count:
+            # selected piece of text
+        xTextRange = xIndexAccess.getByIndex(i)
+        xText=xTextRange.getText()
+        xWordCursor = xText.createTextCursorByRange(xTextRange)
+        original=xTextRange.getString()
+        xWordCursor.setString("")
         for token in processSentence(original):
             xWordCursor.setString(token.kanji)
             if token.reading is not None: 
                 xWordCursor.setPropertyValue("RubyText", token.reading)
             xWordCursor.goRight(len(token.kanji),False)
-
-    else:
-        # Selection occurred. Now process all the selected pieces of text.
-        i = 0
-        while i < count:
-            # selected piece of text
-            xTextRange = xIndexAccess.getByIndex(i)
-            xText=xTextRange.getText()
-            xWordCursor = xText.createTextCursorByRange(xTextRange)
-            original=xTextRange.getString()
-            xWordCursor.setString("")
-            for token in processSentence(original):
-                xWordCursor.setString(token.kanji)
-                if token.reading is not None: 
-                    xWordCursor.setPropertyValue("RubyText", token.reading)
-                xWordCursor.goRight(len(token.kanji),False)
-
     return None
 
 def escapeText(text):
