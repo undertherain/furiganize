@@ -131,9 +131,9 @@ class MecabController(object):
     def GetReadingRaw(self, expr):
         self.ensureOpen()
         expr = escapeText(expr)
-        self.mecab.stdin.write(expr.encode("euc-jp", "ignore")+'\n')
+        self.mecab.stdin.write(expr.encode("euc-jp", "ignore")+b'\n')
         self.mecab.stdin.flush()
-        expr = unicode(self.mecab.stdout.readline().rstrip('\r\n'), "euc-jp")
+        expr = str(self.mecab.stdout.readline(),"euc-jp").rstrip('\r\n')
         return expr
 
 # Kakasi
@@ -164,9 +164,9 @@ class KakasiController(object):
     def reading(self, expr):
         self.ensureOpen()
         expr = escapeText(expr)
-        self.kakasi.stdin.write(expr.encode("sjis", "ignore")+'\n')
+        self.kakasi.stdin.write(expr.encode("sjis", "ignore")+b'\n')
         self.kakasi.stdin.flush()
-        res = unicode(self.kakasi.stdout.readline().rstrip('\r\n'), "sjis")
+        res= str(self.kakasi.stdout.readline(), "sjis").rstrip('\r\n')
         return res
 
 class KakasiControllerMultiple(object):
@@ -187,9 +187,9 @@ class KakasiControllerMultiple(object):
     def reading(self, expr):
         self.ensureOpen()
         expr = escapeText(expr)
-        self.kakasi.stdin.write(expr.encode("sjis", "ignore")+'\n')
+        self.kakasi.stdin.write(expr.encode("sjis", "ignore")+b'\n')
         self.kakasi.stdin.flush()
-        res = unicode(self.kakasi.stdout.readline().rstrip('\r\n'), "sjis")
+        res = str(self.kakasi.stdout.readline(), "sjis").rstrip('\r\n')
         return res
 
 # Init
@@ -281,15 +281,15 @@ def ProcessPhrase(expr):
 if __name__ == "__main__":
     expr = u"カリン、 千葉 千葉 千 彼二千三百六十円も使った。回転寿司."
     expr = u"私は日本人です"
-    print expr
-    print kakasi.reading(expr)
+    print (expr)
+    print (kakasi.reading(expr))
 
-    print "-------------------" 
+    print ("-------------------")
     fin=u""
     tokens=processSentence(expr)
     for token in tokens:
         fin=fin+token.kanji
         if token.reading is not None: fin=fin+"["+token.reading+"]"
-    print fin
+    print (fin)
 
 g_exportedScripts = Furiganize,
