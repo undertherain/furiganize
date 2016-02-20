@@ -66,7 +66,7 @@ def Furiganize(dummy = ''):
             xWordCursor.setString(token.kanji)
             if token.reading is not None: 
                 xWordCursor.setPropertyValue("RubyText", token.reading)
-            xWordCursor.goRight(len(token.kanji),False)
+               xWordCursor.goRight(len(token.kanji),False)
     return None
 
 def escapeText(text):

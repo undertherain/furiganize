@@ -7,7 +7,7 @@ It is written in Python and uses mecab and kakasi installed system-wide<br/>
 It makes things easier for Linux users, you just need to install kakasi, mecab and mecab-naist-jdic-eucjp packages,<br/>
 they are usually available form standard repositories.<br/>
 Then copy macro to your LibreOffice script path,<br/>
-something like ~/.config/libreoffice/3/user/Scripts/python<br/>
+something like ~/.config/libreoffice/4/user/Scripts/python<br/>
 (libreoffice-script-provider-python package should be installed to enable Python macros in LibreOffice)
 select you Japanese text and run macro.<br/>
 
