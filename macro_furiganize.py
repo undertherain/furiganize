@@ -66,7 +66,7 @@ def Furiganize(dummy = ''):
             xWordCursor.setString(token.kanji)
             if token.reading is not None: 
                 xWordCursor.setPropertyValue("RubyText", token.reading)
-                xWordCursor.goRight(len(token.kanji),False)
+            xWordCursor.goRight(len(token.kanji),False)
     return None
 
 def escapeText(text):
@@ -280,6 +280,7 @@ def ProcessPhrase(expr):
 if __name__ == "__main__":
     expr = u"カリン、 千葉 千葉 千 彼二千三百六十円も使った。回転寿司."
     expr = u"私は日本人です"
+    expr = u"水田をみる.水をのむ."
     print (expr)
     print (kakasi.reading(expr))
 
