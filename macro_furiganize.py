@@ -75,6 +75,7 @@ def Furiganize(dummy=''):
             xWordCursor.setString(token.kanji)
             if token.reading is not None:
                 xWordCursor.setPropertyValue("RubyText", token.reading)
+                xWordCursor.setPropertyValue("RubyAdjust", 1)
             xWordCursor.goRight(len(token.kanji), False)
     return None
 
