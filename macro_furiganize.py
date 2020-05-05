@@ -15,6 +15,13 @@ enc = "utf-8"
 isWin = False
 isMac = False
 
+# Enumeration values for the adjustment of ruby text.
+LEFT = 0
+CENTER = 1
+RIGHT = 2
+BLOCK = 3
+INDENT_BLOCK = 4
+
 srcFields = ['Expression']
 dstFields = ['Reading']
 
@@ -75,7 +82,7 @@ def Furiganize(dummy=''):
             xWordCursor.setString(token.kanji)
             if token.reading is not None:
                 xWordCursor.setPropertyValue("RubyText", token.reading)
-                xWordCursor.setPropertyValue("RubyAdjust", 1)
+                xWordCursor.setPropertyValue("RubyAdjust", CENTER)
             xWordCursor.goRight(len(token.kanji), False)
     return None
 
