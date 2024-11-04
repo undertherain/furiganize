@@ -5,7 +5,10 @@ Furiganize is furigana (Japanese phonetic symbols) insertion macro for LibreOffi
 (should work in OpenOffice too, but I did not check)
 
 It is written in Python and uses mecab and kakasi installed system-wide.
-It makes things easier for Linux users, you just need to install kakasi, mecab and mecab-naist-jdic-eucjp packages (on fedora install kakasi-dict), they are usually available form standard repositories.
+It makes things easier for Linux users,
+you just need to install kakasi, mecab and mecab-naist-jdic-eucjp packages on Ubuntu, 
+or  kakasi, kakasi-dict, mecab and mecab-ipadic-EUCJP on Fedora.
+They are usually available form standard repositories.
 
 Then copy macro to your LibreOffice script path, typically
 `~/.config/libreoffice/4/user/Scripts/python`
