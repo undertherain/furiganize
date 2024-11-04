@@ -3,17 +3,16 @@
 # Automatic reading generation with kakasi and mecab.
 # Written by Aleksandr Drozd, used some code from Anki Japanese support addon
 
-import sys
+import logging
 import os
-import platform
 import re
 import subprocess
-import codecs
-import inspect
+import sys
 
 enc = "utf-8"
 isWin = False
 isMac = False
+logger = logging.getLogger(__name__)
 
 # Enumeration values for the adjustment of ruby text.
 LEFT = 0
@@ -185,12 +184,16 @@ class KakasiController(object):
                 raise Exception("Please install kakasi")
 
     def reading(self, expr):
-        self.ensureOpen()
-        expr = escapeText(expr)
-        self.kakasi.stdin.write(expr.encode("sjis", "ignore") + b'\n')
-        self.kakasi.stdin.flush()
-        res = str(self.kakasi.stdout.readline(), "sjis").rstrip('\r\n')
-        return res
+        try:
+            self.ensureOpen()
+            expr = escapeText(expr)
+            self.kakasi.stdin.write(expr.encode("sjis", "ignore") + b'\n')
+            self.kakasi.stdin.flush()
+            res = str(self.kakasi.stdout.readline(), "sjis").rstrip('\r\n')
+            return res
+        except:
+            print("something went wrong:")
+            print(self.kakasi.stdout.readline())
 
 
 class KakasiControllerMultiple(object):
@@ -265,9 +268,11 @@ def ProcessPhrase(expr):
     original = expr
     expr = mecab.GetReadingRaw(expr)
     out = []
+    print("RHIS IS FROM MECAB:", expr)
     for node in expr.split(" "):
         if not node:
             break
+        logger.debug(f"parsing node: {node}")
         (kanji, reading) = re.match("(.+)\[(.*)\]", node).groups()
         # hiragana, punctuation, not japanese, or lacking a reading
         if kanji == reading or not reading:
@@ -314,8 +319,8 @@ if __name__ == "__main__":
     expr = u"カリン、 千葉 千葉 千 彼二千三百六十円も使った。回転寿司."
     expr = u"私は日本人です"
     expr = u"水田をみる.水をのむ."
-    print(expr)
-    print(kakasi.reading(expr))
+    print("parsing expression:", expr)
+    print("kakasi reading:", kakasi.reading(expr))
 
     print("-------------------")
     fin = u""
