@@ -21,14 +21,13 @@ RIGHT = 2
 BLOCK = 3
 INDENT_BLOCK = 4
 
-srcFields = ['Expression']
-dstFields = ['Reading']
+srcFields = ["Expression"]
+dstFields = ["Reading"]
 
 kakasiArgsMultiple = ["-isjis", "-osjis", "-u", "-JH", "-KH", "-p"]
-#kakasiArgs = ["-isjis", "-osjis", "-u", "-JH", "-KH","-s","-f"]
+# kakasiArgs = ["-isjis", "-osjis", "-u", "-JH", "-KH","-s","-f"]
 kakasiArgs = ["-isjis", "-osjis", "-u", "-JH", "-KH"]
-mecabArgs = ['--node-format=%m[%f[7]] ',
-             '--eos-format=\n', '--unk-format=%m[] ']
+mecabArgs = ["--node-format=%m[%f[7]] ", "--eos-format=\n", "--unk-format=%m[] "]
 
 
 class Token:
@@ -37,14 +36,15 @@ class Token:
         self.kanji = _kanji
         self.reading = _reading
 
+
 # gCursor;
 
 
-def Furiganize(dummy=''):
-    '''
+def Furiganize(dummy=""):
+    """
     Macro for Writer.
-    Ads furigana to kanji
-    '''
+    Adds furigana to kanji
+    """
     doc = XSCRIPTCONTEXT.getDocument()
     xController = doc.getCurrentController()
 
@@ -55,9 +55,9 @@ def Furiganize(dummy=''):
     if count == 1 and len(xIndexAccess.getByIndex(0).getString()) == 0:
         return None
         # No selection. Process the word with the caret within it.
-        #xTextRange = xIndexAccess.getByIndex(0)
-        #xWordCursor = xTextRange.getText().createTextCursorByRange(xTextRange)
-        #if not xWordCursor.isStartOfWord(): xWordCursor.gotoStartOfWord(False)
+        # xTextRange = xIndexAccess.getByIndex(0)
+        # xWordCursor = xTextRange.getText().createTextCursorByRange(xTextRange)
+        # if not xWordCursor.isStartOfWord(): xWordCursor.gotoStartOfWord(False)
         # xWordCursor.gotoEndOfWord(True)
         # original=xWordCursor.getString()
         # xWordCursor.setString("aaa"+original+"bbbwr")
@@ -70,7 +70,7 @@ def Furiganize(dummy=''):
     else:
         # Selection occurred. Now process all the selected pieces of text.
         i = 0
-#        while i < count:
+        #        while i < count:
         # selected piece of text
         xTextRange = xIndexAccess.getByIndex(i)
         xText = xTextRange.getText()
@@ -89,11 +89,12 @@ def Furiganize(dummy=''):
 def escapeText(text):
     # strip characters that trip up kakasi/mecab
     text = text.replace("\n", " ")
-    text = text.replace(u'\uff5e', "~")
+    text = text.replace("\uff5e", "~")
     text = re.sub("<br( /)?>", "---newline---", text)
-    #text = stripHTML(text)
+    # text = stripHTML(text)
     text = text.replace("---newline---", "<br>")
     return text
+
 
 if sys.platform == "win32":
     si = subprocess.STARTUPINFO()
@@ -124,13 +125,13 @@ class MecabController(object):
 
     def setup(self):
         #        base = "./support/"
-        #elf.mecabCmd = mungeForPlatform( [base + "mecab"] + mecabArgs + ['-d', base, '-r', base + "mecabrc"])
+        # elf.mecabCmd = mungeForPlatform( [base + "mecab"] + mecabArgs + ['-d', base, '-r', base + "mecabrc"])
         #        print self.mecabCmd
         #        self.mecabCmd=['./support/mecab.lin', '--node-format=%m[%f[7]] ', '--eos-format=\n', '--unk-format=%m[] ', '-d', './support/', '-r', './support/mecabrc']
         #        self.mecabCmd=['mecab', '--node-format=%m[%f[7]] ', '--eos-format=\n', '--unk-format=%m[] ']
-        self.mecabCmd = ['mecab'] + mecabArgs
-        #os.environ['DYLD_LIBRARY_PATH'] = base
-        #os.environ['LD_LIBRARY_PATH'] = base
+        self.mecabCmd = ["mecab"] + mecabArgs
+        # os.environ['DYLD_LIBRARY_PATH'] = base
+        # os.environ['LD_LIBRARY_PATH'] = base
         # if not isWin:
         # os.chmod(self.mecabCmd[0], 0755)
 
@@ -139,19 +140,24 @@ class MecabController(object):
             self.setup()
             try:
                 self.mecab = subprocess.Popen(
-                    self.mecabCmd, bufsize=-1, stdin=subprocess.PIPE,
-                    stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
-                    startupinfo=si)
+                    self.mecabCmd,
+                    bufsize=-1,
+                    stdin=subprocess.PIPE,
+                    stdout=subprocess.PIPE,
+                    stderr=subprocess.STDOUT,
+                    startupinfo=si,
+                )
             except OSError:
                 raise Exception("Please install mecab")
 
     def GetReadingRaw(self, expr):
         self.ensureOpen()
         expr = escapeText(expr)
-        self.mecab.stdin.write(expr.encode("euc-jp", "ignore") + b'\n')
+        self.mecab.stdin.write(expr.encode("euc-jp", "ignore") + b"\n")
         self.mecab.stdin.flush()
-        expr = str(self.mecab.stdout.readline(), "euc-jp").rstrip('\r\n')
+        expr = str(self.mecab.stdout.readline(), "euc-jp").rstrip("\r\n")
         return expr
+
 
 # Kakasi
 ##########################################################################
@@ -164,11 +170,10 @@ class KakasiController(object):
 
     def setup(self):
         base = "./support/"
-        self.kakasiCmd = mungeForPlatform(
-            [base + "kakasi"] + kakasiArgs)
+        self.kakasiCmd = mungeForPlatform([base + "kakasi"] + kakasiArgs)
         self.kakasiCmd = ["kakasi"] + kakasiArgs
-        #os.environ['ITAIJIDICT'] = base + "itaijidict"
-        #os.environ['KANWADICT'] = base + "kanwadict"
+        # os.environ['ITAIJIDICT'] = base + "itaijidict"
+        # os.environ['KANWADICT'] = base + "kanwadict"
         # if not isWin:
         #   os.chmod(self.kakasiCmd[0], 0755)
 
@@ -177,9 +182,13 @@ class KakasiController(object):
             self.setup()
             try:
                 self.kakasi = subprocess.Popen(
-                    self.kakasiCmd, bufsize=-1, stdin=subprocess.PIPE,
-                    stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
-                    startupinfo=si)
+                    self.kakasiCmd,
+                    bufsize=-1,
+                    stdin=subprocess.PIPE,
+                    stdout=subprocess.PIPE,
+                    stderr=subprocess.STDOUT,
+                    startupinfo=si,
+                )
             except OSError:
                 raise Exception("Please install kakasi")
 
@@ -187,9 +196,9 @@ class KakasiController(object):
         try:
             self.ensureOpen()
             expr = escapeText(expr)
-            self.kakasi.stdin.write(expr.encode("sjis", "ignore") + b'\n')
+            self.kakasi.stdin.write(expr.encode("sjis", "ignore") + b"\n")
             self.kakasi.stdin.flush()
-            res = str(self.kakasi.stdout.readline(), "sjis").rstrip('\r\n')
+            res = str(self.kakasi.stdout.readline(), "sjis").rstrip("\r\n")
             return res
         except:
             print("something went wrong:")
@@ -209,19 +218,24 @@ class KakasiControllerMultiple(object):
             self.setup()
             try:
                 self.kakasi = subprocess.Popen(
-                    self.kakasiCmd, bufsize=-1, stdin=subprocess.PIPE,
-                    stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
-                    startupinfo=si)
+                    self.kakasiCmd,
+                    bufsize=-1,
+                    stdin=subprocess.PIPE,
+                    stdout=subprocess.PIPE,
+                    stderr=subprocess.STDOUT,
+                    startupinfo=si,
+                )
             except OSError:
                 raise Exception("Please install kakasi")
 
     def reading(self, expr):
         self.ensureOpen()
         expr = escapeText(expr)
-        self.kakasi.stdin.write(expr.encode("sjis", "ignore") + b'\n')
+        self.kakasi.stdin.write(expr.encode("sjis", "ignore") + b"\n")
         self.kakasi.stdin.flush()
-        res = str(self.kakasi.stdout.readline(), "sjis").rstrip('\r\n')
+        res = str(self.kakasi.stdout.readline(), "sjis").rstrip("\r\n")
         return res
+
 
 # Init
 ##########################################################################
@@ -246,13 +260,13 @@ def SplitKanji(token):
         readings = readings[1:-1]
     readings = readings.split("|")
     for reading in readings:
-        if token.reading[:len(reading)] == reading:
+        if token.reading[: len(reading)] == reading:
             result.append(Token(token.kanji[0], reading))
             token.kanji = token.kanji[1:]
-            token.reading = token.reading[len(reading):]
+            token.reading = token.reading[len(reading) :]
             result = result + SplitKanji(token)
             return result
-    return[token]
+    return [token]
 
 
 def processSentence(expr):
@@ -268,7 +282,7 @@ def ProcessPhrase(expr):
     original = expr
     expr = mecab.GetReadingRaw(expr)
     out = []
-    print("RHIS IS FROM MECAB:", expr)
+    print("THIS IS FROM MECAB:", expr)
     for node in expr.split(" "):
         if not node:
             break
@@ -278,24 +292,24 @@ def ProcessPhrase(expr):
         if kanji == reading or not reading:
             out.append(Token(kanji, None))
             continue
+        reading = kakasi.reading(reading)
         # katakana
-        if kanji == kakasi.reading(reading):
+        if kanji == reading:
             out.append(Token(kanji, None))
             continue
         # convert to hiragana
-        reading = kakasi.reading(reading)
         # ended up the same
         if reading == kanji:
             out.append(Token(kanji, None))
             continue
         # don't add readings of numbers
-        if kanji in u"一二三四五六七八九十０１２３４５６７８９":
+        if kanji in "一二三四五六七八九十０１２３４５６７８９":
             out.append(Token(kanji, None))
             continue
         # strip matching characters and beginning and end of reading and kanji
         # reading should always be at least as long as the kanji
-        pref = u""
-        post = u""
+        pref = ""
+        post = ""
         while len(kanji) > 0 and kanji[0] == reading[0]:
             pref = pref + kanji[0]
             kanji = kanji[1:]
@@ -316,14 +330,14 @@ def ProcessPhrase(expr):
 ##########################################################################
 
 if __name__ == "__main__":
-    expr = u"カリン、 千葉 千葉 千 彼二千三百六十円も使った。回転寿司."
-    expr = u"私は日本人です"
-    expr = u"水田をみる.水をのむ."
+    expr = "カリン、 千葉 千葉 千 彼二千三百六十円も使った。回転寿司."
+    expr = "私は日本人です"
+    expr = "水田をみる.水をのむ."
     print("parsing expression:", expr)
     print("kakasi reading:", kakasi.reading(expr))
 
     print("-------------------")
-    fin = u""
+    fin = ""
     tokens = processSentence(expr)
     for token in tokens:
         fin = fin + token.kanji
@@ -331,4 +345,4 @@ if __name__ == "__main__":
             fin = fin + "[" + token.reading + "]"
     print(fin)
 
-g_exportedScripts = Furiganize,
+g_exportedScripts = (Furiganize,)
