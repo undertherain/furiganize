@@ -287,7 +287,7 @@ def ProcessPhrase(expr):
         if not node:
             break
         logger.debug(f"parsing node: {node}")
-        (kanji, reading) = re.match("(.+)\[(.*)\]", node).groups()
+        (kanji, reading) = re.match(r"(.+)\[(.*)\]", node).groups()
         # hiragana, punctuation, not japanese, or lacking a reading
         if kanji == reading or not reading:
             out.append(Token(kanji, None))
