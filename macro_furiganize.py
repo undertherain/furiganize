@@ -282,7 +282,7 @@ def ProcessPhrase(expr):
     original = expr
     expr = mecab.GetReadingRaw(expr)
     out = []
-    print("THIS IS FROM MECAB:", expr)
+    print("mecab returned:", expr)
     for node in expr.split(" "):
         if not node:
             break
@@ -330,19 +330,21 @@ def ProcessPhrase(expr):
 ##########################################################################
 
 if __name__ == "__main__":
-    expr = "カリン、 千葉 千葉 千 彼二千三百六十円も使った。回転寿司."
-    expr = "私は日本人です"
-    expr = "水田をみる.水をのむ."
-    print("parsing expression:", expr)
-    print("kakasi reading:", kakasi.reading(expr))
-
-    print("-------------------")
-    fin = ""
-    tokens = processSentence(expr)
-    for token in tokens:
-        fin = fin + token.kanji
-        if token.reading is not None:
-            fin = fin + "[" + token.reading + "]"
-    print(fin)
+    samples = []
+    samples.append("手紙")
+    samples.append("カリン、 千葉 千葉 千 彼二千三百六十円も使った。回転寿司.")
+    samples.append("私は日本人です")
+    samples.append("水田をみる.水をのむ.")
+    for expr in samples:
+        print("-------------------")
+        print("parsing expression:", expr)
+        print("kakasi returned:", kakasi.reading(expr))
+        fin = ""
+        tokens = processSentence(expr)
+        for token in tokens:
+            fin = fin + token.kanji
+            if token.reading is not None:
+                fin = fin + "[" + token.reading + "]"
+        print(fin)
 
 g_exportedScripts = (Furiganize,)
