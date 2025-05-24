@@ -15,7 +15,7 @@ Then copy macro to your LibreOffice script path, typically
 
 (libreoffice-script-provider-python package should be installed to enable Python macros in LibreOffice) 
 
-Select you Japanese text and run macro.
+Select your Japanese text and run macro.
 
 In case of Windows it might be a little bit more complicated,
 you also need to install mecab and kakasi and make sure they are included in %PATH%.
@@ -31,4 +31,4 @@ p.s.
 
 Suggested reading might not always be 100% correct, but it's more due to the limitations of mecab, rather than the macro.
 
-Furigana is inserted as "ruby text", to edit it go to main menu -> Format -> Asian phonetic guide
+Furigana is inserted as "ruby text", to edit it go to main menu -> Format -> Asian phonetic guide.
