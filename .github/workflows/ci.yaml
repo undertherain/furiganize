@@ -1,0 +1,40 @@
+name: Python CI on Windows
+
+on:
+  push:
+    branches:
+      - main # Run on pushes to the main branch
+  pull_request:
+    branches:
+      - main # Run on pull requests to the main branch
+
+jobs:
+  build:
+    runs-on: windows-latest # Specify the Windows runner
+
+    strategy:
+      matrix:
+        python-version: ["3.8", "3.9", "3.10", "3.11", "3.12"] # Test against multiple Python versions
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4 # Action to check out your code
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5 # Action to set up Python
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: 'pip' # Cache pip dependencies for faster builds
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          # pip install -r requirements.txt # Install dependencies from your requirements.txt
+          # You might also need to install your project in editable mode:
+          # pip install -e .
+
+      - name: Run tests with pytest
+        run: |
+          python3 macro_furiganize.py
+          # pip install pytest # Install your testing framework
+          # pytest # Command to run your tests (adjust if using a different framework)
