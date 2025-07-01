@@ -337,6 +337,7 @@ if __name__ == "__main__":
     samples.append("カリン、 千葉 千葉 千 彼二千三百六十円も使った。回転寿司.")
     samples.append("私は学生です。")
     samples.append("水田がある.水をのむ.")
+    samples.append("8ヶ月")
     for expr in samples:
         print("-------------------")
         print("parsing expression:", expr)
