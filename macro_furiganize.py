@@ -36,6 +36,9 @@ class Token:
         self.kanji = _kanji
         self.reading = _reading
 
+    def __str__(self):
+        return f"{[self.kanji]}{{{self.reading}}}"
+
 
 # gCursor;
 
@@ -248,6 +251,7 @@ mecab = MecabController()
 def SplitKanji(token):
     # kanji=node[0]
     # reading=node[1]
+    print("got token", token)
     if len(token.kanji) == 1:
         return [token]
     result = []
@@ -256,6 +260,8 @@ def SplitKanji(token):
             result.append(Token(token.kanji[i], token.reading[i]))
         return result
     readings = kakasi_multiple.reading(token.kanji[0])
+    if not readings:
+        return [token]
     if readings[0] == "{":
         readings = readings[1:-1]
     readings = readings.split("|")
